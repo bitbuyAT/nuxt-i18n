@@ -132,12 +132,14 @@ export default async (context) => {
       return false
     }
 
-    const { alwaysRedirect, fallbackLocale } = detectBrowserLanguage
+    const { alwaysRedirect, fallbackLocale, onlyRedirectFromRoot } = detectBrowserLanguage
 
     let matchedLocale
 
     if (useCookie && (matchedLocale = app.i18n.getLocaleCookie())) {
       // Get preferred language from cookie if present and enabled
+    } else if (onlyRedirectFromRoot && route.path !== '/') {
+      // Skip detection if not in root path 
     } else if (process.client && typeof navigator !== 'undefined' && navigator.languages) {
       // Get browser language either from navigator if running on client side, or from the headers
       matchedLocale = matchBrowserLocale(localeCodes, navigator.languages)
